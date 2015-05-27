@@ -1,0 +1,193 @@
+/*
+* General css
+*/
+body{
+    padding:0;
+    margin:0;
+    background-color: rgb(252,252,252);
+    min-width:800px;
+    font-family: 'Open Sans', sans-serif, Helvetica, Arial, sans-serif;
+}
+a{
+    color:inherit;
+    text-decoration: none;
+}
+a:hover{
+    color: rgb(0, 70, 150);
+}
+
+#main {
+    width:100%; max-width:1000px;
+    margin:5px auto;
+    position: relative;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.box{
+    display: block;
+    box-sizing: border-box;
+    border:solid 1px rgb(220,220,220);
+    border-radius: 3px;
+    background-color: white;
+    padding:10px;
+    color: rgb(150,150,150);
+    position: relative;
+    margin-bottom: 30px;
+}
+
+/*
+* Headings
+*/
+h1{
+    font-family: 'Open Sans', sans-serif, Helvetica, Arial, sans-serif;
+    font-weight: 300;
+    text-align: center;
+    font-size:48px;
+    padding:20px 5px; margin:20px 0 0 0;
+    color: Black;
+    box-sizing: border-box;
+}
+
+h3{
+    margin:0 0 5px 0; padding:10px 0;
+    text-align: center;
+    font-family: 'Open Sans', sans-serif, Helvetica, Arial, sans-serif;
+    font-weight: normal;
+    font-size: 16px;
+}
+
+/*
+* Featured movies
+*/
+#featured{
+    padding:20px 0;
+    /*box-shadow: inset 2px 0px 20px 0px rgba(0,0,0,1);*/
+    background-color: black;
+    overflow-y: hidden; overflow-x:scroll;
+    position: relative;
+}
+#featured-container{
+    height:500px;
+}
+#featured div.movie{
+    width:300px; height:450px; float: left;
+    margin: 0 10px;
+    position:relative;
+}
+#featured div.movie div.background{
+    position:absolute; top:0; left:0; height: 100%; width:100%;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    -webkit-box-reflect: below 10px -webkit-linear-gradient(bottom, rgba(0,0,0,0.5), rgba(0,0,0,0) 60px);
+}
+#featured div.movie:hover{
+    box-shadow: 0px 0px 5px white;
+    cursor:pointer;
+}
+#featured div.movie span.title{
+    position:absolute;
+    bottom:0; left:0; width:100%;
+    text-align: center;
+    color: white;
+    background-color: rgba(0,0,0,0.8);
+    padding: 10px 0;
+    display:none;
+}
+
+/*
+* Details
+*/
+#details{
+    float:right;
+    width:300px;
+    min-height:500px;
+}
+#details-overview{
+    font-size: 13px;
+    text-align: justify;
+}
+#details-poster{
+    width:100%;
+    display: block;
+    border-radius: 3px;
+}
+
+/*
+* Figures
+*/
+div.figure-box div.figure{
+    text-align: center;
+    font-size:40px;
+    color:rgb(0,70,150);
+    font-weight: 300;
+    margin-bottom: 10px;
+}
+div.figure-box sup{
+    font-size:20px;
+}
+
+/*
+* Maps
+*/
+#map{
+    height:200px;
+}
+
+/*
+* Tweets feed
+*/
+#feed{
+    margin-right:330px;
+    min-height:980px;
+}
+
+/*
+* Tweet
+*/
+div.tweet{
+    padding-left:68px; min-height:70px;
+}
+div.tweet img.avatar{
+    position:absolute;
+    top:10px; left:10px;
+    width:48px; height:48px;
+    border-radius: 5px;
+}
+div.tweet div.user{
+    color:rgb(0,70,150); font-weight: bold;
+}
+div.tweet div.user a{
+    font-weight: normal;
+    color:rgb(200,200,200);
+    padding:5px;
+}
+div.tweet div.user a:hover{
+    color:inherit;
+}
+div.tweet div.text{
+    font-size:14px;
+}
+div.tweet div.metadata{
+    position:absolute; top:100%; left:0;
+    width:100%;
+    height:20px;
+    line-height:20px;
+    font-size:11px;
+    color:rgb(200,200,200);
+}
+div.tweet div.metadata img{
+    height:16px; padding:2px; display: block; float: left; margin:0 2px;
+}
+
+
+/*
+* Footer
+*/
+#footer{
+    font-size:11px;
+    padding:10px;
+    margin-bottom: 30px;
+    text-align: justify;
+}
