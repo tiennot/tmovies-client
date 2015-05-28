@@ -30,6 +30,9 @@ function getSup(date){
     else if(date%10==2) return "nd";
     else return "th";
 }
+function getRotation(percentage){
+    return 220*percentage/100 - 110;
+}
 function setMovie(movieId){
     //Loading screen
     var loadingScreen = document.getElementById("loading-screen");
@@ -39,7 +42,7 @@ function setMovie(movieId){
     currentMovieId = movieId;
     document.getElementById("feed-tweets").innerHTML = "";
     //JSON url
-    var url = "getMovie.php?id="+movieId;
+    var url = "getMovie.php?id="+movieId+"&top="+topTweetsOnly.valueOf();
     //Gets JSON
     $.getJSON( url, function( data ) {
         document.getElementById("movie-title").innerHTML = data.title;
@@ -52,6 +55,10 @@ function setMovie(movieId){
         document.getElementById("details-release-date").innerHTML = monthNames[d.getMonth()]+" "+ d.getDate() + "<sup>"+getSup(d.getDate())+"</sup>";
         document.getElementById("details-release-title").innerHTML = d < new Date() ? "Released" : "To be released";
         document.getElementById("tweets-count").innerHTML = data.count;
+        //Sets the value of the pointers
+        document.getElementById("pointer-1").style.transform = "rotate("+getRotation(data.rel_pop)+"deg)";
+        document.getElementById("pointer-2").style.transform = "rotate("+getRotation(data.rel_flow)+"deg)";
+        document.getElementById("pointer-3").style.transform = "rotate("+getRotation(data.rel_rating)+"deg)";
         //Removes loading screen
         var loadingScreen = document.getElementById("loading-screen");
         loadingScreen.style.opacity = 0;

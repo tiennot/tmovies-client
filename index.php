@@ -56,11 +56,31 @@ require("functions.php");
         </div>
 
         <!-- Movie title -->
-        <h1 id="movie-title">
-            The great Gatsby
-        </h1>
+        <h1 id="movie-title"></h1>
 
         <div id="main">
+            <!-- Rating box -->
+            <div class="box" id="rating">
+                <h3>Indicators for this movie (updated every hour)</h3>
+                <div class="widget-container">
+                    <div class="widget">
+                        Popularity
+                        <div class="pointer" id="pointer-1"></div>
+                    </div>
+                </div>
+                <div class="widget-container">
+                    <div class="widget">
+                        Tweet Flow
+                        <div class="pointer" id="pointer-2"></div>
+                    </div>
+                </div>
+                <div class="widget-container">
+                    <div class="widget">
+                        Rating
+                        <div class="pointer"  id="pointer-3"></div>
+                    </div>
+                </div>
+            </div>
             <!-- The details column -->
             <div id="details">
                 <!-- Allows to choose between relevant and live tweets-->
