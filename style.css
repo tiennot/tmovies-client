@@ -115,6 +115,56 @@ h3{
 }
 
 /*
+* Toggler
+*/
+div.toggler{
+    height:32px; line-height:32px;
+    width:56px; margin: auto;
+    position: relative;
+}
+div.toggler a.left, div.toggler a.right{
+    display: inline-block;
+    position:absolute;
+    top:0px;
+    padding:0 10px;
+    cursor: default;
+}
+div.toggler a.left{
+    right:100%;
+    margin-right:-28px;
+    padding-right:38px;
+    text-align: right;
+}
+div.toggler a.right{
+    left:100%;
+    margin-left:-28px;
+    padding-left:38px;
+    text-align: left;
+}
+div.toggler:before{
+    content:'';
+    position:absolute; left:50%; top:0px; height:100%; width:100%;
+    margin-left:-50%;
+    background-color: rgb(0, 70, 150);
+    border-radius: 20px;
+    box-sizing: border-box;
+}
+div.toggler:after{
+    content:'';
+    position:absolute; top:0px; height:32px; width:32px;
+    border:solid 3px rgb(0, 70, 150);
+    border-radius: 100%;
+    box-sizing: border-box;
+    background-color: white;
+}
+div.toggler-left:after{
+    left:0%;
+}
+div.toggler-right:after{
+    right:0%;
+}
+
+/*
 * Figures
 */
 div.figure-box div.figure{
@@ -180,7 +230,43 @@ div.tweet div.metadata{
 div.tweet div.metadata img{
     height:16px; padding:2px; display: block; float: left; margin:0 2px;
 }
+#load-more-tweets{
+    line-height:30px; text-align: center;
+}
+#load-more-tweets *{
+    display: inline-block;
+    padding: 3px 10px;
+    border:solid 1px rgb(220,220,220);
+    color: rgb(200,200,200);
+    border-radius: 3px;
+    background-color: white;
+    cursor:pointer;
+}
+#load-more-tweets a:hover{
+    border-color:rgb(0,70,150);
+    color:rgb(0,70,150);
+}
+div.notTop{
+    display: none;
+}
 
+/*
+* Loading screen
+*/
+div.loadingScreen{
+    position:fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background-color: white;
+    opacity: 0;
+    -webkit-transition: opacity 0.2s;
+    transition: opacity 0.2s;
+}
+div.loadingScreen img{
+    position:absolute; top:50%; left:50%;
+    width:200px; height:200px;
+    margin:-100px;
+}
 
 /*
 * Footer

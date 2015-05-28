@@ -7,7 +7,11 @@ function timestampToString(timestamp){
     if(h<10) h = '0' + h;
     var m = d.getMinutes();
     if(m<10) m = '0' + m;
-    return h+":"+m;
+    var now = new Date();
+    //If the same day, ok
+    if(now.getDate()== d.getDate()) return h+":"+m;
+    //Else have to precise day
+    return monthNames[d.getMonth()]+" "+d.getDate()+getSup(d.getDate())+", "+h+":"+m;
 }
 
 /*
@@ -27,9 +31,13 @@ function getSup(date){
     else return "th";
 }
 function setMovie(movieId){
+    //Loading screen
+    var loadingScreen = document.getElementById("loading-screen");
+    loadingScreen.style.display = "block";
+    setTimeout("document.getElementById('loading-screen').style.opacity = 0.8", 50);
     //Changes current id
     currentMovieId = movieId;
-    document.getElementById("feed").innerHTML = "";
+    document.getElementById("feed-tweets").innerHTML = "";
     //JSON url
     var url = "getMovie.php?id="+movieId;
     //Gets JSON
@@ -43,63 +51,97 @@ function setMovie(movieId){
         d.setDate(data.release_date.substr(8,2));
         document.getElementById("details-release-date").innerHTML = monthNames[d.getMonth()]+" "+ d.getDate() + "<sup>"+getSup(d.getDate())+"</sup>";
         document.getElementById("details-release-title").innerHTML = d < new Date() ? "Released" : "To be released";
-        document.getElementById("tweets-last-hour").innerHTML = data.count;
+        document.getElementById("tweets-count").innerHTML = data.count;
+        //Removes loading screen
+        var loadingScreen = document.getElementById("loading-screen");
+        loadingScreen.style.opacity = 0;
+        setTimeout("document.getElementById('loading-screen').style.display = 'none'", 500);
         //Scrolls to title
         $('html, body').animate({
             scrollTop: $("#movie-title").offset().top
         }, 300);
     });
-    //resets the timestamp
-    timestamp = null;
+    //resets the latest timestamp
+    timestampLatest = null;
     t_refresh = 1;
-    tweet_fromDb(false);
+    getNewTweets(false);
 }
 
 /*
  * Handles tweets
  */
-//The timestamp of last retrieved tweet;
-var timestamp = null;
+//The timestamp of most recent retrieved tweet;
+var timestampLatest = null;
+//The timestamp of the oldest retrieved tweet
+var timestampOldest = null;
+//Current state : retrieving or not
 var retrieving = false;
-function tweet_fromDb(reschedule){
+
+//Gets new tweets (incoming)
+function getNewTweets(reschedule){
     //If already retrieving, delays
     if(retrieving){
-        setTimeout("tweet_fromDb("+reschedule+")", 1000);
+        setTimeout("getNewTweets("+reschedule+")", 1000);
         return;
     }
     //Else starts retrieving
     retrieving = true;
     //JSON url
-    var url = "getTweet.php?movie="+currentMovieId;
-    if(timestamp!=null) url += "&timestamp=" + timestamp;
+    var url = "getTweet.php?movie="+currentMovieId+"&action=new&top="+topTweetsOnly.valueOf();
+    if(timestampLatest!=null) url += "&timestamp=" + timestampLatest;
     //Gets JSON
     $.getJSON( url, function( data ) {
-        var items = [];
         var nbRetrieved = 0;
-        var firstRetrieval = timestamp==null;
+        var firstRetrieval = timestampLatest==null;
         $.each( data, function( key, val ) {
-            //If timestamp is more recent, updates
-            if(timestamp < val.timestamp || timestamp==null) timestamp = val.timestamp;
-            //Adds the tweet to the feed
-            tweet_addToFeed(val);
+            //Updates the timestamp
+            if(timestampLatest==null){
+                timestampLatest = val.timestamp;
+                timestampOldest = val.timestamp;
+            }else if(timestampLatest < val.timestamp){
+                timestampLatest = val.timestamp;
+            }else if(timestampOldest > val.timestamp){
+                timestampOldest = val.timestamp;
+            }
+            //Adds the tweet to the beginning feed
+            tweet_addToFeed(val, true);
             //Retrieval not empty
             nbRetrieved++;
         });
         //Updates the nb of tweets for last hour
-        var tlh = document.getElementById("tweets-last-hour");
+        var tlh = document.getElementById("tweets-count");
         if(!firstRetrieval) tlh.innerHTML = tlh.innerHTML*1 + nbRetrieved;
         if(reschedule) tweet_scheduleRefresh(nbRetrieved);
         retrieving = false;
     });
 }
 
+//Gets more tweets (older tweets)
+function getMoreTweets(){
+    //JSON url
+    var url = "getTweet.php?movie="+currentMovieId+"&timestamp="+timestampOldest+"&action=more&top="+topTweetsOnly.valueOf();
+    //If no tweet already, means there is none to retrieve
+    if(timestampOldest==null) return;
+    //Gets JSON
+    $.getJSON( url, function( data ) {
+        $.each( data, function( key, val ) {
+            //Updates the timestamp
+            if(timestampOldest > val.timestamp){
+                timestampOldest = val.timestamp;
+            }
+            //Adds the tweet to the end of the feed
+            tweet_addToFeed(val, false);
+        });
+    });
+}
+
 //Adds tweet object to the feed
-function tweet_addToFeed(tweet){
+function tweet_addToFeed(tweet, prepend){
     if(tweet.text==null) return;
-    var feed = document.getElementById("feed");
+    var feedTweets = document.getElementById("feed-tweets");
     //Creates a tweet box
     var tweet_box = document.createElement("div");
-    tweet_box.className = "tweet box";
+    tweet_box.className = "tweet box " + (tweet.top_tweet==1 ? "top" : "notTop");
     //Creates avatar
     var avatar = document.createElement("img");
     avatar.src = tweet.avatar;
@@ -136,7 +178,9 @@ function tweet_addToFeed(tweet){
     //Appends box to feed
     var box = jQuery(tweet_box);
     box.hide();
-    jQuery(feed).prepend(box);
+    //Appends or prepends according to situation
+    if(prepend) jQuery(feedTweets).prepend(box);
+    else jQuery(feedTweets).append(box)
     box.show('fast');
 }
 
@@ -149,11 +193,22 @@ function tweet_scheduleRefresh(nbRetrieved){
     else if(t_refresh>1) t_refresh -= 1;
     console.log("refresh timeout = " + t_refresh);
     //Schedules next retrieval
-    setTimeout('tweet_fromDb(true)', t_refresh*1000);
+    setTimeout('getNewTweets(true)', t_refresh*1000);
 }
 //Adds inital db query
-window.addEventListener("load", tweet_fromDb, false);
+window.addEventListener("load", getNewTweets, false);
 
+
+/*
+* Two modes of display: all displays all tweets while top displays only relevant ones
+ */
+var topTweetsOnly = true;
+function toggleDisplay(left){
+    var toggler = document.getElementById("toggle-feed");
+    toggler.className = left ? "toggler toggler-left" : "toggler toggler-right";
+    topTweetsOnly = left;
+    setMovie(currentMovieId);
+}
 
 /*
  * Map for displaying the area

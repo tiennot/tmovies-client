@@ -63,27 +63,18 @@ require("functions.php");
         <div id="main">
             <!-- The details column -->
             <div id="details">
-                <!-- Release date -->
-                <div class="figure-box box">
-                    <h3 id="details-release-title">Release date</h3>
-                    <div class="figure" id="details-release-date">
+                <!-- Allows to choose between relevant and live tweets-->
+                <div class="box">
+                    <h3>Display</h3>
+                    <div class="toggler toggler-left" id="toggle-feed">
+                        <a class="left" onclick="toggleDisplay(true)">Top</a>
+                        <a class="right" onclick="toggleDisplay(false)">All</a>
                     </div>
                 </div>
-                <!-- The poster -->
-                <div class="box">
-                    <img id="details-poster" src=""/>
-                </div>
-                <!-- The overview -->
-                <div class="box">
-                    <h3>Overview</h3>
-                    <div id="details-overview">
-                    </div>
-                </div>
-
-                <!-- Gives number of weather tweets for this town, last hour -->
+                <!-- Gives number of tweets recorded for this movie -->
                 <div class="figure-box box">
-                    <h3>Tweets in last hour</h3>
-                    <div class="figure" id="tweets-last-hour">
+                    <h3>Tweet count</h3>
+                    <div class="figure" id="tweets-count">
                         <?php
                         $request = $GLOBALS["bdd"]->prepare("SELECT count(*) as nb FROM tweets WHERE timestamp > ?");
                         $request->execute(Array((time()-3600)*1000));
@@ -92,6 +83,26 @@ require("functions.php");
                         ?>
                     </div>
                 </div>
+
+                <!-- The poster -->
+                <div class="box">
+                    <img id="details-poster" src=""/>
+                </div>
+
+                <!-- Release date -->
+                <div class="figure-box box">
+                    <h3 id="details-release-title">Release date</h3>
+                    <div class="figure" id="details-release-date">
+                    </div>
+                </div>
+
+                <!-- The overview -->
+                <div class="box">
+                    <h3>Overview</h3>
+                    <div id="details-overview">
+                    </div>
+                </div>
+
                 <!-- Map of tweets locations -->
                 <!--<div class="box" id="map">
                 </div>-->
@@ -112,21 +123,14 @@ require("functions.php");
 
             <!-- The tweet feed with real-time updating-->
             <div id="feed">
-                <?php
-                    /*$request = $GLOBALS["bdd"]->query("SELECT * FROM tweets ORDER BY id DESC LIMIT 20");
-                    while($data = $request->fetch(PDO::FETCH_ASSOC)){
-                        ?>
-                        <div class="tweet box">
-                            <img class="avatar" src="<?php echo $data["avatar"] ?>"/>
-                            <div class="user"><?php echo $data["user"] ?></div>
-                            <div class="text">
-                                <?php echo $data["text"] ?>
-                            </div>
-                        </div>
-                        <?php
-                    }*/
-                ?>
+                <div id="feed-tweets"></div>
+                <div id="load-more-tweets" onclick="getMoreTweets()">
+                    <a>See more</a>
+                </div>
             </div>
+        </div>
+        <div class="loadingScreen" id="loading-screen">
+            <img src="icons/loading.gif"/>
         </div>
     </body>
 </html>

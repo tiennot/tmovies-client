@@ -8,8 +8,15 @@ header( "Content-Type:application/json" );
 //Default id is 0
 $movieId = isset($_GET["id"]) ? $_GET["id"] : 0;
 
-$request = $GLOBALS["bdd"]->prepare(
-    "SELECT movies.*, count(tweets.movieId) as count FROM movies, tweets WHERE movies.id=tweets.movieId AND movies.id=? GROUP BY movieId");
+//JOIN LEFT ensures that even movies with no tweet will be returned
+$request = $GLOBALS["bdd"]->prepare("
+    SELECT movies.*, count(tweets.movieId) as count
+    FROM movies
+    LEFT JOIN tweets
+    ON movies.id = tweets.movieId
+    WHERE movies.id=?
+    GROUP BY movieId
+");
 $request->execute(Array($movieId));
 
 if($data=$request->fetch(PDO::FETCH_ASSOC)){
