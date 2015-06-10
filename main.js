@@ -174,14 +174,18 @@ function tweet_addToFeed(tweet, prepend){
         .replace(/(#)([a-z0-9]+)/ig, "<a href='https://twitter.com/hashtag/$2?src=hash' target='_blank' class='hashtag'>$1$2</a>")
         .replace(/(@)([a-z0-9]+)/ig, "<a href='https://twitter.com/$2' target='_blank'>$1$2</a>");
     //Creates metadata div
-    var metadata = document.createElement("div");
-    metadata.innerHTML = "<img src='icons/clock-16.png'/>" + timestampToString(tweet.timestamp);
-    metadata.className = "metadata";
+    var metadataLeft = document.createElement("div");
+    metadataLeft.innerHTML = "<img src='icons/clock-16.png'/>" + timestampToString(tweet.timestamp);
+    metadataLeft.className = "metadata-left";
+    var metadataRight = document.createElement("div");
+    metadataRight.innerHTML = "<img src='icons/good-16.png'/>"+ Math.round(tweet.score*10)/10;
+    metadataRight.className = "metadata-right";
     //Appends divs to box
     tweet_box.appendChild(avatar);
     tweet_box.appendChild(user);
     tweet_box.appendChild(text);
-    tweet_box.appendChild(metadata);
+    tweet_box.appendChild(metadataLeft);
+    tweet_box.appendChild(metadataRight);
     //Appends box to feed
     var box = jQuery(tweet_box);
     box.hide();

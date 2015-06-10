@@ -35,7 +35,7 @@ require("functions.php");
                 $image_base_url = getConfigValue("image_base_url");
                 //Passes the variable to script
                 echo "<script>image_base_url='", $image_base_url, "'</script>";
-                $request = $GLOBALS["bdd"]->query("SELECT id, poster_path as src, title FROM movies ORDER BY popularity DESC LIMIT ".$nbFeatured);
+                $request = $GLOBALS["bdd"]->query("SELECT id, poster_path as src, title FROM movies ORDER BY rel_pop DESC LIMIT ".$nbFeatured);
                 $count = 0;
                 while($data = $request->fetch(PDO::FETCH_ASSOC)){
                     ?>

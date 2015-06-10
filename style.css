@@ -250,16 +250,23 @@ div.tweet div.user a:hover{
 div.tweet div.text{
     font-size:14px;
 }
-div.tweet div.metadata{
-    position:absolute; top:100%; left:0;
-    width:100%;
+div.tweet div.metadata-left, div.tweet div.metadata-right{
+    position:absolute; top:100%;
+    width:50%;
     height:20px;
     line-height:20px;
     font-size:11px;
     color:rgb(200,200,200);
 }
-div.tweet div.metadata img{
-    height:16px; padding:2px; display: block; float: left; margin:0 2px;
+div.tweet div.metadata-right{
+    right:0; text-align: right;
+}
+div.tweet div.metadata-left{
+    left:0; text-align: left;
+}
+div.tweet div.metadata-left img, div.tweet div.metadata-right img{
+    height:16px; padding:2px; display: inline-block; margin:0 2px;
+    vertical-align: top;
 }
 #load-more-tweets{
     line-height:30px; text-align: center;
