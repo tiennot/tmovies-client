@@ -178,7 +178,7 @@ function tweet_addToFeed(tweet, prepend){
     metadataLeft.innerHTML = "<img src='icons/clock-16.png'/>" + timestampToString(tweet.timestamp);
     metadataLeft.className = "metadata-left";
     var metadataRight = document.createElement("div");
-    metadataRight.innerHTML = "<img src='icons/good-16.png'/>"+ Math.round(tweet.score*10)/10;
+    metadataRight.innerHTML = "<img src='icons/good-16.png'/>"+ Math.round(tweet.score*10)/10 + "<span style='font-size:8px'>/10</span>";
     metadataRight.className = "metadata-right";
     //Appends divs to box
     tweet_box.appendChild(avatar);
